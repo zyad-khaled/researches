@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Usage Statistics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 90%;
+            max-width: 1200px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow-y: auto;
+        }
+        .chart-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            width: 400px !important;
+            height: 400px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="chart-container">
+            <h1>Male Social Media Usage</h1>
+            <canvas id="group1Chart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Female Social Media Usage</h1>
+            <canvas id="group2Chart"></canvas>
+        </div>
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // Data for Group 1
+        const group1Data = {
+            labels: [
+                'More than 5 hours',
+                '4 to 5 hours',
+                '3 to 4 hours',
+                '2 to 3 hours',
+                '1 to 2 hours',
+                'Less than 1 hour'
+            ],
+            datasets: [{
+                data: [22.5, 25, 15, 12.5, 15, 10],
+                backgroundColor: [
+                    '#FF6384',  // More than 5 hours
+                    '#36A2EB',  // 4 to 5 hours
+                    '#FFCE56',  // 3 to 4 hours
+                    '#4BC0C0',  // 2 to 3 hours
+                    '#9966FF',  // 1 to 2 hours
+                    '#FF9F40'   // Less than 1 hour
+                ],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        };
+
+        // Data for Group 2
+        const group2Data = {
+            labels: [
+                'More than 5 hours',
+                '4 to 5 hours',
+                '3 to 4 hours',
+                '2 to 3 hours',
+                '1 to 2 hours',
+                'Less than 1 hour'
+            ],
+            datasets: [{
+                data: [33, 11, 33, 16.95, 3.7, 2],
+                backgroundColor: [
+                    '#FF6384',  // More than 5 hours
+                    '#36A2EB',  // 4 to 5 hours
+                    '#FFCE56',  // 3 to 4 hours
+                    '#4BC0C0',  // 2 to 3 hours
+                    '#9966FF',  // 1 to 2 hours
+                    '#FF9F40'   // Less than 1 hour
+                ],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        };
+
+        const config = {
+            type: 'pie',
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#333',
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        window.onload = function() {
+            const ctx1 = document.getElementById('group1Chart').getContext('2d');
+            new Chart(ctx1, {
+                ...config,
+                data: group1Data
+            });
+
+            const ctx2 = document.getElementById('group2Chart').getContext('2d');
+            new Chart(ctx2, {
+                ...config,
+                data: group2Data
+            });
+        };
+    </script>
+</body>
+</html>
+

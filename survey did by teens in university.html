@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Statistics in Malaysia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 90%;
+            max-width: 1000px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            height: 90vh;
+            overflow-y: auto;
+        }
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            width: 400px !important;
+            height: 400px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="chart-container">
+            <h1>Females: Depression</h1>
+            <canvas id="femaleDepressionChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Males: Depression</h1>
+            <canvas id="maleDepressionChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Females: Anxiety</h1>
+            <canvas id="femaleAnxietyChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Males: Anxiety</h1>
+            <canvas id="maleAnxietyChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Females: Doctor Visits</h1>
+            <canvas id="femaleDoctorChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Males: Doctor Visits</h1>
+            <canvas id="maleDoctorChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Females: Panic Attacks</h1>
+            <canvas id="femalePanicChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Males: Panic Attacks</h1>
+            <canvas id="malePanicChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const lightGreen = 'rgba(144, 238, 144, 0.8)';
+        const darkGreen = 'rgba(0, 100, 0, 0.8)';
+
+        const createData = (labels, data) => ({
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: [lightGreen, darkGreen],
+                borderColor: [lightGreen, darkGreen],
+                borderWidth: 1
+            }]
+        });
+
+        const femaleDepressionData = createData(['No Depression', 'Depression'], [60, 40]);
+        const maleDepressionData = createData(['No Depression', 'Depression'], [77, 23]);
+        const femaleAnxietyData = createData(['No Anxiety', 'Anxiety'], [68, 32]);
+        const maleAnxietyData = createData(['No Anxiety', 'Anxiety'], [60, 40]);
+        const femaleDoctorData = createData(['Did Not Try to Find Doctor', 'Tried to Find Doctor'], [93, 7]);
+        const maleDoctorData = createData(['Did Not Try to Find Doctor', 'Tried to Find Doctor'], [96, 4]);
+        const femalePanicData = createData(['No Panic Attacks', 'Panic Attacks'], [67, 33]);
+        const malePanicData = createData(['No Panic Attacks', 'Panic Attacks'], [68, 32]);
+
+        const config = {
+            type: 'pie',
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: 'rgba(54, 54, 54, 1)',
+                            font: {
+                                size: 14,
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                            }
+                        }
+                    }
+                }
+            },
+        };
+
+        window.onload = function() {
+            const charts = [
+                { id: 'femaleDepressionChart', data: femaleDepressionData },
+                { id: 'maleDepressionChart', data: maleDepressionData },
+                { id: 'femaleAnxietyChart', data: femaleAnxietyData },
+                { id: 'maleAnxietyChart', data: maleAnxietyData },
+                { id: 'femaleDoctorChart', data: femaleDoctorData },
+                { id: 'maleDoctorChart', data: maleDoctorData },
+                { id: 'femalePanicChart', data: femalePanicData },
+                { id: 'malePanicChart', data: malePanicData }
+            ];
+
+            charts.forEach(chart => {
+                const ctx = document.getElementById(chart.id).getContext('2d');
+                new Chart(ctx, {
+                    ...config,
+                    data: chart.data
+                });
+            });
+        };
+    </script>
+</body>
+</html>

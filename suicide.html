@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suicide Statistics in the United States and Turkey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 90%;
+            max-width: 1000px;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            height: 90vh;
+            overflow-y: auto;
+        }
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            width: 400px !important;
+            height: 400px !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <div class="chart-container">
+            <h1>Male Suicide United States</h1>
+            <canvas id="usMaleChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Female Suicide United States</h1>
+            <canvas id="usFemaleChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Male Suicide Turkey</h1>
+            <canvas id="turkeyMaleChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Female Suicide Turkey</h1>
+            <canvas id="turkeyFemaleChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Suicide Distribution by Gender</h1>
+            <canvas id="genderDistributionChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h1>Countries with Highest Gen Z Suicides</h1>
+            <canvas id="genZSuicidesChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        function createLineChart(ctx, data, title) {
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015],
+                    datasets: [{
+                        label: title,
+                        data: data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Suicides'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Year'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPieChart(ctx, data, labels, title) {
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: {
+                            display: true,
+                            text: title
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createBarChart(ctx, data, labels, title) {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Number of Gen Z Suicides',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: title
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Suicides'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Country'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = function() {
+            createLineChart(document.getElementById('usMaleChart').getContext('2d'), 
+                [131, 154, 175, 187, 201, 226, 252, 277, 255], 
+                'Male Suicide United States');
+
+            createLineChart(document.getElementById('usFemaleChart').getContext('2d'), 
+                [53, 68, 90, 87, 86, 85, 143, 151, 158], 
+                'Female Suicide United States');
+
+            createLineChart(document.getElementById('turkeyMaleChart').getContext('2d'), 
+                [null, null, 23, 27, 20, 24, 17, 21, 18], 
+                'Male Suicide Turkey');
+
+            createLineChart(document.getElementById('turkeyFemaleChart').getContext('2d'), 
+                [null, null, 18, 25, 23, 15, 23, 18, 18], 
+                'Female Suicide Turkey');
+
+            createPieChart(document.getElementById('genderDistributionChart').getContext('2d'),
+                [23, 77], ['Female', 'Male'], 'Suicide Distribution by Gender');
+
+            createBarChart(document.getElementById('genZSuicidesChart').getContext('2d'),
+                [2779, 1779, 1720, 1073, 709],
+                ['United States', 'Mexico', 'Russian Federation', 'Brazil', 'Colombia'],
+                'Countries with Highest Gen Z Suicides');
+        };
+    </script>
+</body>
+</html>
